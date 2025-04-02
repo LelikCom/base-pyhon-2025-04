@@ -1,9 +1,7 @@
-
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 import uvicorn
-
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -27,15 +25,15 @@ movies = [
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
     return templates.TemplateResponse(
-        "index.html", {"request": request,
-                       "message": "Добро пожаловать!!", 'title': 'Главная'})
+        request, "index.html", {"message": "Добро пожаловать!!", 'title': 'Главная'}
+    )
 
 
 @app.get("/movies/", response_class=HTMLResponse)
 async def movies_list(request: Request):
     return templates.TemplateResponse(
-        "movies.html", {"request": request,
-                        "movies": movies, 'title': 'Фильмы'})
+        request, "movies.html", {"movies": movies, 'title': 'Фильмы'}
+    )
 
 
 @app.get("/movies/{movie_id}", response_class=HTMLResponse)
@@ -43,16 +41,15 @@ async def movie_detail(request: Request, movie_id: int):
     """
     Movie detail
     """
-    movie = next((m for m in movies if m['id'] == movie_id))
+    movie = next((m for m in movies if m['id'] == movie_id), None)
     if not movie:
         return templates.TemplateResponse(
-            "404.html", {"request": request,
-                         'title': 'Фильмы'})
+            request, "404.html", {'title': 'Фильмы'}
+        )
 
     return templates.TemplateResponse(
-        "movie_detail.html", {"request": request,
-                                                            "movie": movie, 'title': 'Фильмы'})
-
+        request, "movie_detail.html", {"movie": movie, 'title': 'Фильмы'}
+    )
 
 if __name__ == '__main__':
     uvicorn.run("app:app", host='127.0.0.1', port=8000)
