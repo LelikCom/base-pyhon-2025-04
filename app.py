@@ -25,22 +25,32 @@ movies = [
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request, "message": "Добро пожаловать!!", 'title': 'Главная'})
+    return templates.TemplateResponse(
+        "index.html", {"request": request,
+                       "message": "Добро пожаловать!!", 'title': 'Главная'})
 
 
 @app.get("/movies/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("movies.html", {"request": request, "movies": movies, 'title': 'Фильмы'})
+async def movies_list(request: Request):
+    return templates.TemplateResponse(
+        "movies.html", {"request": request,
+                        "movies": movies, 'title': 'Фильмы'})
 
 
 @app.get("/movies/{movie_id}", response_class=HTMLResponse)
-async def index(request: Request, movie_id: int):
+async def movie_detail(request: Request, movie_id: int):
+    """
+    Movie detail
+    """
     movie = next((m for m in movies if m['id'] == movie_id))
     if not movie:
-        return templates.TemplateResponse("404.html", {"request": request, 'title': 'Фильмы'})
+        return templates.TemplateResponse(
+            "404.html", {"request": request,
+                         'title': 'Фильмы'})
 
-    return templates.TemplateResponse("movie_detail.html", {"request": request, "movie": movie, 'title': 'Фильмы'})
-
+    return templates.TemplateResponse(
+        "movie_detail.html", {"request": request,
+                                                            "movie": movie, 'title': 'Фильмы'})
 
 
 if __name__ == '__main__':

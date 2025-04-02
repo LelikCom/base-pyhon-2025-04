@@ -1,0 +1,4 @@
+[MESSAGES CONTROL]
+disable=
+    C0301,  # line too long
+    C0116,  # missing function or method docstring
